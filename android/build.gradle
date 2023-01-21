@@ -5,10 +5,14 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        jcenter()
+        maven { url 'https://jitpack.io' }
+
     }
 
     dependencies {
         classpath 'com.android.tools.build:gradle:7.3.0'
+
     }
 }
 
@@ -32,4 +36,7 @@ android {
     defaultConfig {
         minSdkVersion 16
     }
+}
+dependencies {
+    implementation("io.github.thanosfisherman.wifiutils:wifiutils:1.6.6")
 }
