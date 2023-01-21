@@ -1,5 +1,4 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-
 import 'flutter_wifi_utils_method_channel.dart';
 
 abstract class FlutterWifiUtilsPlatform extends PlatformInterface {
@@ -25,5 +24,29 @@ abstract class FlutterWifiUtilsPlatform extends PlatformInterface {
 
   Future<String?> getPlatformVersion() {
     throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+  Future<bool?> enableWiFi(){
+    throw UnimplementedError('enableWiFi() has not been implemented');
+  }
+
+  Future<void> disableWiFi(){
+    throw UnimplementedError('disableWiFi() has not been implemented');
+  }
+
+  Future<bool> connectToWiFi({required String SSID, required String password, int timeout = 40000}){
+    throw UnimplementedError('connectToWiFi() has not been implemented');
+  }
+
+  Future<bool> connectToWiFiViaBSSIDAndSSID({required String BSSID, required String SSID, required String password, int timeout = 40000}){
+    throw UnimplementedError('connectToWiFiViaBSSIDAndSSID() has not been implemented');
+  }
+
+  Future<bool> connectWithWPS({required String BSSID, required String password, int timeout = 40000}){
+    throw UnimplementedError('connectWithWPS() has not been implemented');
+  }
+
+  Future<bool> disconnectAndRemove({required String SSID}){
+    throw UnimplementedError('disconnectAndRemove() has not been implemented');
   }
 }

@@ -88,9 +88,9 @@ public class WiFiCommands {
                 .start();
     }
 
-    public void connectWithWPS(Context context , String BSSID, String password, MethodChannel.Result result){
+    public void connectWithWPS(Context context , String BSSID, String password, MethodChannel.Result result, int timeout){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            WifiUtils.withContext(context).connectWithWps(BSSID, password).onConnectionWpsResult(new ConnectionWpsListener() {
+            WifiUtils.withContext(context).connectWithWps(BSSID, password).setWpsTimeout(timeout).onConnectionWpsResult(new ConnectionWpsListener() {
                 @Override
                 public void isSuccessful(boolean isSuccess) {
                     result.success(isSuccess);

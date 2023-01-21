@@ -1,7 +1,10 @@
 package fun.etrigan.flutter_wifi_utils;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 
+import fun.etrigan.flutter_wifi_utils.WiFi.WiFiCommands;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -14,18 +17,43 @@ public class FlutterWifiUtilsPlugin implements FlutterPlugin, MethodCallHandler 
   ///
   /// This local reference serves to register the plugin with the Flutter Engine and unregister it
   /// when the Flutter Engine is detached from the Activity
+  WiFiCommands wiFiCommands = new WiFiCommands();
   private MethodChannel channel;
-
+  private Context applicationContext;
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
     channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "flutter_wifi_utils");
     channel.setMethodCallHandler(this);
+    applicationContext = flutterPluginBinding.getApplicationContext();
   }
 
   @Override
   public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
     if (call.method.equals("getPlatformVersion")) {
       result.success("Android " + android.os.Build.VERSION.RELEASE);
+    } else if(call.method.equals("enableWiFi")){
+      wiFiCommands.enableWiFi(applicationContext, result);
+    } else if(call.method.equals("disableWiFi")){
+      wiFiCommands.disableWiFi(applicationContext);
+    } else if (call.method.equals("connectToWiFi")){
+      String SSID = call.argument("SSID");
+      String password = call.argument("password");
+      int timeout = call.argument("timeout");
+      wiFiCommands.connectToWiFi(applicationContext, result, SSID, password, timeout);
+    } else if (call.method.equals("connectToWiFiViaBSSID")){
+      String SSID = call.argument("SSID");
+      String password = call.argument("password");
+      String BSSID = call.argument("BSSID");
+      int timeout = call.argument("timeout");
+      wiFiCommands.connectToWiFiViaSSIDAndBSSID(applicationContext, result, SSID, BSSID, password, timeout);
+    }else if(call.method.equals("connectViaWPS")){
+      String BSSID = call.argument("BSSID");
+      String password = call.argument("password");
+      int timeout = call.argument("timeout");
+      wiFiCommands.connectWithWPS(applicationContext, BSSID, password, result, timeout);
+    } else if (call.method.equals("disconnectAndRemove")){
+      String SSID = call.argument("SSID");
+      wiFiCommands.disconnectAndRemove(applicationContext, SSID, result);
     } else {
       result.notImplemented();
     }
@@ -34,5 +62,6 @@ public class FlutterWifiUtilsPlugin implements FlutterPlugin, MethodCallHandler 
   @Override
   public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
     channel.setMethodCallHandler(null);
+    applicationContext = null;
   }
 }
