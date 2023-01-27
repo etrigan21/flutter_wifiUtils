@@ -26,12 +26,8 @@ abstract class FlutterWifiUtilsPlatform extends PlatformInterface {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
-  Future<bool?> enableWiFi(){
+  Future<bool?> toggleWiFi(){
     throw UnimplementedError('enableWiFi() has not been implemented');
-  }
-
-  Future<void> disableWiFi(){
-    throw UnimplementedError('disableWiFi() has not been implemented');
   }
 
   Future<bool> connectToWiFi({required String SSID, required String password, int timeout = 40000}){

@@ -15,13 +15,10 @@ class MethodChannelFlutterWifiUtils extends FlutterWifiUtilsPlatform {
   }
 
   @override
-  Future<bool?> enableWiFi()async{
+  Future<bool?> toggleWiFi()async{
     return await methodChannel.invokeMethod<bool>("enableWiFi");
   }
-  @override
-  Future<void> disableWiFi()async{
-    await methodChannel.invokeMethod("disableWiFi");
-  }
+
   @override
   Future<bool> connectToWiFi({required String SSID, required String password, int timeout = 40000})async{
     return await methodChannel.invokeMethod("connectToWiFi", {
