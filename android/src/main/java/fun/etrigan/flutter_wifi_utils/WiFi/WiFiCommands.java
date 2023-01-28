@@ -1,11 +1,19 @@
 package fun.etrigan.flutter_wifi_utils.WiFi;
 
+import static androidx.core.app.ActivityCompat.startActivityForResult;
+import static androidx.core.content.ContextCompat.startActivity;
+
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.wifi.ScanResult;
+import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.provider.Settings;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 
 import com.thanosfisherman.wifiutils.WifiUtils;
 import com.thanosfisherman.wifiutils.wifiConnect.ConnectionErrorCode;
@@ -23,10 +31,14 @@ import io.flutter.plugin.common.MethodChannel;
 public class WiFiCommands {
     Boolean isScanAvailable = false;
     List<ScanResult> oldScanResults;
-    public void enableWiFi(Context context, MethodChannel.Result result){
-        WifiUtils.withContext(context).enableWifi((boolean success)->{
-            result.success(success);
-        });
+    public void enableWiFi(Context context, Activity activity){
+        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
+            wifiManager.setWifiEnabled(true);
+        } else {
+            Intent panelIntent = new Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY);
+            startActivityForResult(activity, panelIntent, 0, null);
+        }
     }
 
     public void disableWiFi(Context context){

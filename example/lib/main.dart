@@ -3,7 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_wifi_utils/flutter_wifi_utils.dart';
-
+import 'package:permission_handler/permission_handler.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -19,10 +19,15 @@ class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
   final _flutterWifiUtilsPlugin = FlutterWifiUtils();
 
+  void getPermission()async{
+    await Permission.location.request();
+  }
+
   @override
   void initState() {
     super.initState();
     initPlatformState();
+    getPermission();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -54,9 +59,18 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
-        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              ElevatedButton(
+                onPressed: (){
+                  _flutterWifiUtilsPlugin.enableWiFi();
+                },
+                child: Text("enabler")
+              )
+            ]
+          )
+        )
       ),
     );
   }

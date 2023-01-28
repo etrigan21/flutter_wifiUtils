@@ -26,7 +26,8 @@ class MethodChannelFlutterWifiUtils extends FlutterWifiUtilsPlatform {
   Future<bool> connectToWiFi({required String SSID, required String password, int timeout = 40000})async{
     return await methodChannel.invokeMethod("connectToWiFi", {
       "SSID": SSID,
-      "password": password
+      "password": password,
+      "timeout": timeout,
     });
   }
 

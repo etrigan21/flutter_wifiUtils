@@ -1,18 +1,21 @@
 package fun.etrigan.flutter_wifi_utils;
 
+import android.app.Activity;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
 
 import fun.etrigan.flutter_wifi_utils.WiFi.WiFiCommands;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
+import io.flutter.embedding.engine.plugins.activity.ActivityAware;
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 
 /** FlutterWifiUtilsPlugin */
-public class FlutterWifiUtilsPlugin implements FlutterPlugin, MethodCallHandler {
+public class FlutterWifiUtilsPlugin implements FlutterPlugin, MethodCallHandler , ActivityAware {
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
   /// This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -20,6 +23,7 @@ public class FlutterWifiUtilsPlugin implements FlutterPlugin, MethodCallHandler 
   WiFiCommands wiFiCommands = new WiFiCommands();
   private MethodChannel channel;
   private Context applicationContext;
+  private Activity applicationActivity;
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
     channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "flutter_wifi_utils");
@@ -32,7 +36,7 @@ public class FlutterWifiUtilsPlugin implements FlutterPlugin, MethodCallHandler 
     if (call.method.equals("getPlatformVersion")) {
       result.success("Android " + android.os.Build.VERSION.RELEASE);
     } else if(call.method.equals("enableWiFi")){
-      wiFiCommands.enableWiFi(applicationContext, result);
+      wiFiCommands.enableWiFi(applicationContext, applicationActivity);
     } else if(call.method.equals("disableWiFi")){
       wiFiCommands.disableWiFi(applicationContext);
     } else if (call.method.equals("connectToWiFi")){
@@ -63,5 +67,25 @@ public class FlutterWifiUtilsPlugin implements FlutterPlugin, MethodCallHandler 
   public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
     channel.setMethodCallHandler(null);
     applicationContext = null;
+  }
+
+  @Override
+  public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
+    applicationActivity = binding.getActivity();
+  }
+
+  @Override
+  public void onDetachedFromActivityForConfigChanges() {
+    applicationActivity = null;
+  }
+
+  @Override
+  public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
+    applicationActivity = binding.getActivity();
+  }
+
+  @Override
+  public void onDetachedFromActivity() {
+    applicationActivity = null;
   }
 }
