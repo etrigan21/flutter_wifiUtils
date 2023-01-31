@@ -94,7 +94,13 @@ class _MyAppState extends State<MyApp> {
                     });
                   },
                   child: Text("Disconnect from current WiFi"),
-                )
+                ),
+                ElevatedButton(onPressed: (){
+                  _flutterWifiUtilsPlugin.startScan();
+                }, child: Text("Start Scan")),
+                ElevatedButton(onPressed: (){
+                  _flutterWifiUtilsPlugin.stopScan();
+                }, child: Text("Stop Scan")),
               ]
             )
           )
@@ -136,7 +142,8 @@ Widget _wifiCredentials({required FlutterWifiUtils utils, required BuildContext 
                 } else {
                   print("Cannot be empty");
                 }
-          }, child: Text("Connect"))
+          }, child: Text("Connect")),
+
         ],
       ),
     )

@@ -5,10 +5,12 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import fun.etrigan.flutter_wifi_utils.WiFi.ScanWiFi;
 import fun.etrigan.flutter_wifi_utils.WiFi.WiFiCommands;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
+import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -21,14 +23,20 @@ public class FlutterWifiUtilsPlugin implements FlutterPlugin, MethodCallHandler 
   /// This local reference serves to register the plugin with the Flutter Engine and unregister it
   /// when the Flutter Engine is detached from the Activity
   WiFiCommands wiFiCommands = new WiFiCommands();
+
   private MethodChannel channel;
+  private EventChannel eventChannel;
   private Context applicationContext;
   private Activity applicationActivity;
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-    channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "flutter_wifi_utils");
-    channel.setMethodCallHandler(this);
     applicationContext = flutterPluginBinding.getApplicationContext();
+    channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "flutter_wifi_utils");
+    eventChannel = new EventChannel(flutterPluginBinding.getBinaryMessenger(), "flutter_wifi_utils_events");
+    ScanWiFi scanWiFi = new ScanWiFi(applicationContext);
+    eventChannel.setStreamHandler(scanWiFi);
+    channel.setMethodCallHandler(this);
+
   }
 
   @Override

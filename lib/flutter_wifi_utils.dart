@@ -1,5 +1,8 @@
 
 import 'flutter_wifi_utils_platform_interface.dart';
+import 'flutter_wifi_utils_streams.dart';
+
+EventChannelHandler eventChannelHandler = EventChannelHandler();
 
 class FlutterWifiUtils {
   Future<String?> getPlatformVersion() {
@@ -21,5 +24,13 @@ class FlutterWifiUtils {
 
   Future<bool> disconnectAndRemoveWiFi({required String SSID})async{
     return await FlutterWifiUtilsPlatform.instance.disconnectAndRemove(SSID: SSID);
+  }
+
+  void startScan(){
+    eventChannelHandler.startWifiScan();
+  }
+
+  void stopScan(){
+    eventChannelHandler.cancelWiFiScan();
   }
 }
