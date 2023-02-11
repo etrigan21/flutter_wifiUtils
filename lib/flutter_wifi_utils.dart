@@ -33,4 +33,8 @@ class FlutterWifiUtils {
   void stopScan(){
     eventChannelHandler.cancelWiFiScan();
   }
+
+  get scanResults {
+    eventChannelHandler.scanResults;
+  }
 }

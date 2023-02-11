@@ -19,7 +19,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
+  bool _isScanning = false;
   final _flutterWifiUtilsPlugin = FlutterWifiUtils();
 
   void getPermission()async{
@@ -51,9 +51,6 @@ class _MyAppState extends State<MyApp> {
     // setState to update our non-existent appearance.
     if (!mounted) return;
 
-    setState(() {
-      _platformVersion = platformVersion;
-    });
   }
 
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
@@ -96,11 +93,18 @@ class _MyAppState extends State<MyApp> {
                   child: Text("Disconnect from current WiFi"),
                 ),
                 ElevatedButton(onPressed: (){
+                  setState(() {
+                    _isScanning = true;
+                  });
                   _flutterWifiUtilsPlugin.startScan();
                 }, child: Text("Start Scan")),
                 ElevatedButton(onPressed: (){
+                  setState(() {
+                    _isScanning = false;
+                  });
                   _flutterWifiUtilsPlugin.stopScan();
                 }, child: Text("Stop Scan")),
+
               ]
             )
           )
@@ -108,6 +112,12 @@ class _MyAppState extends State<MyApp> {
       );
   }
 }
+
+// Widget _scanResultsWiFi({required bool isScanning}){
+//   return StreamBuilder(
+//
+//       builder: builder)
+// }
 
 Widget _wifiCredentials({required FlutterWifiUtils utils, required BuildContext context}){
   TextEditingController _passwordController = TextEditingController();
