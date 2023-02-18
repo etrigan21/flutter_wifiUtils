@@ -8,23 +8,32 @@ class EventChannelHandler {
    final EventChannel _wifiStream = const EventChannel("flutter_wifi_utils_events");
    StreamSubscription? _wifiStreamSubscription;
    List<ScanResults> _scanResults = [];
+   bool _isScanning = false;
    get wifiStream{
      return _wifiStream;
    }
 
 
 
-   void startWifiScan(){
-      _wifiStreamSubscription = _wifiStream.receiveBroadcastStream().listen(_listenToWifiStream);
+   void startWifiScan({required Function onReceive}){
+      if(!_isScanning){
+        _isScanning = true;
+        _wifiStreamSubscription = _wifiStream.receiveBroadcastStream().listen((value)=>{
+          _isScanning = false,
+          _scanResults = _convertScanResults(value),
+          onReceive(_scanResults)
+      });
+      }
    }
 
    void cancelWiFiScan(){
-     _wifiStreamSubscription!.cancel();
-   }
-
-   void _listenToWifiStream(value){
-      var scanRes = _convertScanResults(value);
-      _scanResults  = scanRes;
+     if(_isScanning){
+      try{
+      _wifiStreamSubscription!.cancel();
+     }catch(e){
+      print(e);
+     }
+     }
    }
 
    get scanResults {

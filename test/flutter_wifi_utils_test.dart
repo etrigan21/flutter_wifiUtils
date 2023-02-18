@@ -10,6 +10,36 @@ class MockFlutterWifiUtilsPlatform
 
   @override
   Future<String?> getPlatformVersion() => Future.value('42');
+  
+  @override
+  Future<bool> connectToWiFi({required String SSID, required String password, int timeout = 40000}) {
+    // TODO: implement connectToWiFi
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<bool> connectToWiFiViaBSSIDAndSSID({required String BSSID, required String SSID, required String password, int timeout = 40000}) {
+    // TODO: implement connectToWiFiViaBSSIDAndSSID
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<bool> connectWithWPS({required String BSSID, required String password, int timeout = 40000}) {
+    // TODO: implement connectWithWPS
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<bool> disconnectAndRemove({required String SSID}) {
+    // TODO: implement disconnectAndRemove
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<bool?> toggleWiFi() {
+    // TODO: implement toggleWiFi
+    throw UnimplementedError();
+  }
 }
 
 void main() {

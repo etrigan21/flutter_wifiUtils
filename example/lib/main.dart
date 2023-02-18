@@ -93,16 +93,22 @@ class _MyAppState extends State<MyApp> {
                   child: Text("Disconnect from current WiFi"),
                 ),
                 ElevatedButton(onPressed: (){
-                  setState(() {
+                  if(!_isScanning){
+                    setState(() {
                     _isScanning = true;
                   });
-                  _flutterWifiUtilsPlugin.startScan();
+                  _flutterWifiUtilsPlugin.startScan(onReceive: (value)=>{
+                    print(value),
+                  });
+                  }
                 }, child: Text("Start Scan")),
                 ElevatedButton(onPressed: (){
-                  setState(() {
+                  if(_isScanning){
+                    setState(() {
                     _isScanning = false;
                   });
                   _flutterWifiUtilsPlugin.stopScan();
+                  }
                 }, child: Text("Stop Scan")),
 
               ]

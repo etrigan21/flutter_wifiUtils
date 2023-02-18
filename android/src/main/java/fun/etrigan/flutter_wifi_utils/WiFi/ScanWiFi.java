@@ -48,42 +48,42 @@ public class ScanWiFi implements  EventChannel.StreamHandler{
     @Override
     public void onListen(Object arguments, EventChannel.EventSink events) {
         eventSink = events;
-        wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        wifiScanReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                boolean success = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false);
-                if(success){
-                    try {
-                        scanSuccess();
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
-                } else {
-                    try {
-                        scanFailure();
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
+            wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+            wifiScanReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    boolean success = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false);
+                    if(success){
+                        try {
+                            scanSuccess();
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    } else {
+                        try {
+                            scanFailure();
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
+            };
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+            context.registerReceiver(wifiScanReceiver, intentFilter);
+            boolean success = wifiManager.startScan();
+            if(!success){
+                try {
+                    scanFailure();
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
             }
-        };
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-        context.registerReceiver(wifiScanReceiver, intentFilter);
-        boolean success = wifiManager.startScan();
-        if(!success){
-            try {
-                scanFailure();
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 
     @Override
     public void onCancel(Object arguments) {
-        eventSink = null;
-        wifiScanReceiver.abortBroadcast();
+            eventSink = null;
+            wifiScanReceiver.abortBroadcast();
     }
 }

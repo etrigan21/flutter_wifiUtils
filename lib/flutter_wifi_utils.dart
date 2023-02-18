@@ -26,8 +26,8 @@ class FlutterWifiUtils {
     return await FlutterWifiUtilsPlatform.instance.disconnectAndRemove(SSID: SSID);
   }
 
-  void startScan(){
-    eventChannelHandler.startWifiScan();
+  void startScan({required Function onReceive}){
+    eventChannelHandler.startWifiScan(onReceive: onReceive);
   }
 
   void stopScan(){
