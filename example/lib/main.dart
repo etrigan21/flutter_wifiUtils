@@ -149,7 +149,7 @@ Widget _wifiCredentials({required FlutterWifiUtils utils, required BuildContext 
                 if(_ssidController.text.isNotEmpty && _passwordController.text.isNotEmpty){
                   utils.connectToWiFi(SSID: _ssidController.text, password: _passwordController.text).then((value){
                     connected = true;
-                    ssid = "PLDT2G";
+                    ssid = _ssidController.text;
                     Navigator.of(context).pop();
                   }).catchError((err){
                     connected = false;
