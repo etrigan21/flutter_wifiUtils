@@ -1,0 +1,42 @@
+group 'fun.etrigan.flutter_wifi_utils'
+version '1.0'
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+        maven { url 'https://jitpack.io' }
+
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.3.0'
+
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 31
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion 16
+    }
+}
+dependencies {
+    implementation("io.github.thanosfisherman.wifiutils:wifiutils:1.6.6")
+}
